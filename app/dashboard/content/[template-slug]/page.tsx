@@ -29,25 +29,34 @@ function CreateNewContent(props: SlugInterfaces) {
   );
 
   const GenerateAIContent = async (formData: any) => {
+    if (!selectedTemplate) return;
+
     setLoading(true)
-    const selectedPrompt = selectedTemplate?.aiPrompt;
+    const selectedPrompt = selectedTemplate.aiPrompt;
     const finalAIPrompt = JSON.stringify(formData) + ', ' + selectedPrompt;
 
     const result = await chatSession.sendMessage(finalAIPrompt)
-    setAiOutput(result.response?.text())
-    await saveInDb(formData, selectedTemplate?.slug, result.response?.text())
+    const aiResponse = await result.response?.text();
+
+    if (aiResponse) {
+      setAiOutput(aiResponse)
+      await saveInDb(formData, selectedTemplate.slug, aiResponse)
+    }
+    
     setLoading(false)
   };
 
-  const saveInDb = async (formData: string, slug: any, aiResp: string) => {
-    const result =  await db.insert(AIOutput).values({
+  const saveInDb = async (formData: string, slug: string, aiResp: string) => {
+    if (!user || !user.primaryEmailAddress || !user.primaryEmailAddress.emailAddress) return;
+
+    const result = await db.insert(AIOutput).values({
       formData: formData,
       templateSlug: slug,
       aiResponse: aiResp,
-      createdBy: user?.primaryEmailAddress?.emailAddress,
+      createdBy: user.primaryEmailAddress.emailAddress,
       createdAt: moment().format('DD/MM/YYYY')
     })
-    
+
     console.log(result)
   }
 
