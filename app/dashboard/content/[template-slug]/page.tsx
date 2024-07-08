@@ -8,6 +8,10 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { chatSession } from '@/utils/AiModal';
+import { db } from '@/utils/db';
+import { AIOutput } from '@/utils/schema';
+import { useUser } from '@clerk/nextjs';
+import moment from 'moment';
 
 export interface SlugInterfaces {
   params: {
@@ -18,6 +22,7 @@ export interface SlugInterfaces {
 function CreateNewContent(props: SlugInterfaces) {
   const [loading, setLoading] = useState(false)
   const [aiOutput, setAiOutput] = useState<string>('')
+  const { user } = useUser()
 
   const selectedTemplate: TemplateInterfaces | undefined = Templates?.find(
     (item) => item.slug == props.params['template-slug']
@@ -29,10 +34,22 @@ function CreateNewContent(props: SlugInterfaces) {
     const finalAIPrompt = JSON.stringify(formData) + ', ' + selectedPrompt;
 
     const result = await chatSession.sendMessage(finalAIPrompt)
-    console.log(result.response.text())
     setAiOutput(result.response?.text())
+    await saveInDb(formData, selectedTemplate?.slug, result.response?.text())
     setLoading(false)
   };
+
+  const saveInDb = async (formData: string, slug: any, aiResp: string) => {
+    const result =  await db.insert(AIOutput).values({
+      formData: formData,
+      templateSlug: slug,
+      aiResponse: aiResp,
+      createdBy: user?.primaryEmailAddress?.emailAddress,
+      createdAt: moment().format('DD/MM/YYYY')
+    })
+    
+    console.log(result)
+  }
 
   return (
     <div className='p-10'>
