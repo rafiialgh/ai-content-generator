@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import UsageTrack from './UsageTrack';
 
 function SideNav() {
   const path = usePathname();
@@ -32,7 +33,7 @@ function SideNav() {
   ];
 
   return (
-    <div className='h-screen p-5 shadow-sm border bg-white'>
+    <div className='h-screen relative p-5 shadow-sm border bg-white'>
       <div className='flex'>
         <Image
           className='ml-3'
@@ -57,6 +58,9 @@ function SideNav() {
             </div>
           </Link>
         ))}
+      </div>
+      <div className='absolute bottom-10 left-0 w-full'>
+        <UsageTrack />
       </div>
     </div>
   );
