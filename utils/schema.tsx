@@ -8,3 +8,12 @@ export const AIOutput = pgTable('AIOutput', {
   createdBy: varchar('createdBy').notNull(),
   createdAt: varchar('createdAt')
 });
+
+export const UserSubscription = pgTable('UserSubscription', {
+  id: serial('id').primaryKey(),
+  email: varchar('email'),
+  userName: varchar('userName'),
+  active: varchar('active'),
+  paymentId: varchar('paymentId'),
+  joinDate: varchar('joinData')
+})

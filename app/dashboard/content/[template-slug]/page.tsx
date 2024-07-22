@@ -29,7 +29,7 @@ function CreateNewContent(props: SlugInterfaces) {
   const router = useRouter()
 
   const selectedTemplate: TemplateInterfaces | undefined = Templates?.find(
-    (item) => item.slug == props.params['template-slug']
+    (item) => item.slug == props.params['template-slug'],
   )
 
   const GenerateAIContent = async (formData: any) => {
@@ -38,7 +38,7 @@ function CreateNewContent(props: SlugInterfaces) {
     if (totalUsage >= 10000) {
       router.push('/dashboard/billing')
       console.log(
-        'You have reached your limit of 10,000 words. Please upgrade your plan.'
+        'You have reached your limit of 10,000 words. Please upgrade your plan.',
       )
       return
     }

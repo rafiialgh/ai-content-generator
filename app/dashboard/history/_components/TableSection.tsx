@@ -21,8 +21,6 @@ function TableSection() {
   useEffect(() => {
     const fetchData = async () => {
       const data = await db.query.AIOutput.findMany()
-
-      console.log(data)
       setDataTables(data)
       setLoading(false)
     }
