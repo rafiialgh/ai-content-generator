@@ -28,8 +28,7 @@ export async function POST(request) {
     const token = await snap.createTransactionToken(parameter)
     return NextResponse.json({ token })
   } catch (error) {
-    console.error('Error parsing request', error)
     console.error('Error processing request', error)
-    return new Response('Invalid request', { status: 400 })
+    return new Response('Invalid request', { status: error.httpStatusCode })
   }
 }

@@ -1,10 +1,15 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Check, Loader2Icon } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { product } from '@/app/(data)/DataProducts'
 import { NumericFormat } from 'react-number-format'
 import axios from 'axios'
+import { db } from '@/utils/db'
+import { UserSubscription } from '@/utils/schema'
+import { useUser } from '@clerk/nextjs'
+import moment from 'moment'
+import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
 
 export interface ProductInterfaces {
   id: number
@@ -24,6 +29,12 @@ function Billing() {
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isProcess, setIsProcess] = useState<boolean>(false)
+  const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
+  const { user } = useUser()
+
+  useEffect(() => {
+    console.log(isSubscribed)
+  }, [user])
 
   const checkout = async (item: ProductInterfaces) => {
     const data = {
@@ -42,9 +53,16 @@ function Billing() {
         body: JSON.stringify(data),
       })
       const responseData = await response.json()
+      console.log(responseData)
 
       if (responseData.token) {
-        (window as any).snap.pay(responseData.token, {
+        ;(window as any).snap.pay(responseData.token, {
+          onSuccess: function (result: any) {
+            console.log('success')
+            console.log(result.transaction_id)
+            saveSubscription(result.transaction_id)
+            window.location.reload()
+          },
           onClose: function () {
             setIsLoading(false)
             setIsProcess(false)
@@ -59,6 +77,17 @@ function Billing() {
         error.response ? error.response.data : error.message,
       )
     }
+  }
+
+  const saveSubscription = async (paymentId: any) => {
+    const result = await db.insert(UserSubscription).values({
+      email: user?.primaryEmailAddress?.emailAddress,
+      userName: user?.fullName,
+      active: 'true',
+      paymentId: paymentId,
+      joinDate: moment().format('DD/MM/YYYY'),
+    })
+    console.log(result)
   }
 
   return (
@@ -98,17 +127,19 @@ function Billing() {
                 <Check className="mr-3" /> {item.desc4}
               </p>
             </div>
-            <Button
-              className="w-full rounded-full flex gap-1"
-              disabled={item.button || isProcess}
-              onClick={() => checkout(item)}
-              
-            >
-              {isLoading && item.button == false ? (
-                <Loader2Icon className="animate-spin" />
-              ) : null}
-              {item.button ? 'Currently active plan' : 'Get started'}
-            </Button>
+
+            {!isSubscribed && !item.button && (
+              <Button
+                className="flex w-full gap-1 rounded-full"
+                disabled={isProcess}
+                onClick={() => checkout(item)}
+              >
+                {isLoading && item.button == false ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : null}
+                {isSubscribed ? 'Active plan' : 'Get started'}
+              </Button>
+            )}
           </div>
         ))}
       </div>

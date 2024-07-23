@@ -4,6 +4,7 @@ import SideNav from './_components/SideNav'
 import Header from './_components/Header'
 import { TotalUsageContext } from '../(context)/TotalUsageContext'
 import Script from 'next/script'
+import { UserSubscriptionContext } from '../(context)/UserSubscriptionContext'
 
 function layout({
   children,
@@ -11,9 +12,10 @@ function layout({
   children: React.ReactNode
 }>) {
   const [totalUsage, setTotalUsage] = useState<Number>(0)
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
 
   useEffect(() => {
-    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js"
+    const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js'
     const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY
 
     const script = document.createElement('script')
@@ -36,15 +38,19 @@ function layout({
         data-client-key={process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY}
       /> */}
       <TotalUsageContext.Provider value={{ totalUsage, setTotalUsage }}>
-        <div className="h-full sm:h-screen bg-slate-100">
-          <div className="fixed hidden md:block md:w-64">
-            <SideNav />
+        <UserSubscriptionContext.Provider
+          value={{ isSubscribed, setIsSubscribed }}
+        >
+          <div className="h-full bg-slate-100 sm:h-screen">
+            <div className="fixed hidden md:block md:w-64">
+              <SideNav />
+            </div>
+            <div className="md:ml-64">
+              <Header />
+              {children}
+            </div>
           </div>
-          <div className="md:ml-64">
-            <Header />
-            {children}
-          </div>
-        </div>
+        </UserSubscriptionContext.Provider>
       </TotalUsageContext.Provider>
     </>
   )

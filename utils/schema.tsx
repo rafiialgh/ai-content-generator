@@ -15,5 +15,5 @@ export const UserSubscription = pgTable('UserSubscription', {
   userName: varchar('userName'),
   active: varchar('active'),
   paymentId: varchar('paymentId'),
-  joinDate: varchar('joinData')
+  joinDate: varchar('joinDate')
 })

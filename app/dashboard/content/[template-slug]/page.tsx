@@ -14,6 +14,7 @@ import { useUser } from '@clerk/nextjs'
 import moment from 'moment'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { useRouter } from 'next/navigation'
+import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
 
 export interface SlugInterfaces {
   params: {
@@ -25,6 +26,7 @@ function CreateNewContent(props: SlugInterfaces) {
   const [loading, setLoading] = useState(false)
   const [aiOutput, setAiOutput] = useState<string>('')
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext)
+  const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
   const { user } = useUser()
   const router = useRouter()
 
@@ -35,7 +37,7 @@ function CreateNewContent(props: SlugInterfaces) {
   const GenerateAIContent = async (formData: any) => {
     if (!selectedTemplate) return
 
-    if (totalUsage >= 10000) {
+    if (totalUsage >= 10000 && !isSubscribed) {
       router.push('/dashboard/billing')
       console.log(
         'You have reached your limit of 10,000 words. Please upgrade your plan.',
