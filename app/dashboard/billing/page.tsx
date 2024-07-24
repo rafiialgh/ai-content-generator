@@ -10,6 +10,7 @@ import { UserSubscription } from '@/utils/schema'
 import { useUser } from '@clerk/nextjs'
 import moment from 'moment'
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
+import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 
 export interface ProductInterfaces {
   id: number
@@ -30,11 +31,13 @@ function Billing() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isProcess, setIsProcess] = useState<boolean>(false)
   const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
+  const { totalUsage } = useContext(TotalUsageContext)
   const { user } = useUser()
 
   useEffect(() => {
     console.log(isSubscribed)
-  }, [user])
+    console.log(totalUsage)
+  }, [])
 
   const checkout = async (item: ProductInterfaces) => {
     const data = {
@@ -128,18 +131,17 @@ function Billing() {
               </p>
             </div>
 
-            {!isSubscribed && !item.button && (
-              <Button
-                className="flex w-full gap-1 rounded-full"
-                disabled={isProcess}
-                onClick={() => checkout(item)}
-              >
-                {isLoading && item.button == false ? (
-                  <Loader2Icon className="animate-spin" />
-                ) : null}
-                {isSubscribed ? 'Active plan' : 'Get started'}
-              </Button>
-            )}
+            <Button
+            variant={'outline'}
+              className={`flex w-full gap-1 rounded-full font-black ${isSubscribed && item.button && 'hidden'}`}
+              disabled={isSubscribed || item.button || isProcess}
+              onClick={() => checkout(item)}
+            >
+              {isLoading && item.button == false ? (
+                <Loader2Icon className="animate-spin" />
+              ) : null}
+              {isSubscribed || item.button ? 'Active plan' : 'Get started'}
+            </Button>
           </div>
         ))}
       </div>

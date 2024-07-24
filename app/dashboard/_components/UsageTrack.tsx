@@ -17,21 +17,26 @@ function UsageTrack() {
   const [maxWords, setMaxWords] = useState<number>(10000)
 
   useEffect(() => {
-    user && getData()
-    user && isUserSubscribed()
-    console.log(isSubscribed)
+    if (user) {
+      getData()
+      isUserSubscribed()
+    }
   }, [user])
 
   const getData = async () => {
-    // @ts-ignore
-    const result: DataTablesProps[] = await db
-      .select()
-      .from(AIOutput)
-      .where(
-        eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress ?? ''),
-      )
+    try {
+      // @ts-ignore
+      const result: DataTablesProps[] = await db
+        .select()
+        .from(AIOutput)
+        .where(
+          eq(AIOutput.createdBy, user?.primaryEmailAddress?.emailAddress ?? ''),
+        )
 
-    getTotalUsage(result)
+      getTotalUsage(result)
+    } catch (error) {
+      console.log('Error fetching data: ', error)
+    }
   }
 
   const getTotalUsage = (result: DataTablesProps[]) => {
@@ -50,13 +55,14 @@ function UsageTrack() {
       .where(
         eq(
           UserSubscription.email,
-          user?.primaryEmailAddress?.emailAddress ?? '',
+          user?.primaryEmailAddress?.emailAddress ?? ''
         ),
       )
 
     if (result) {
       setIsSubscribed(true)
       setMaxWords(1000000)
+      console.log(isSubscribed)
       console.log(result)
     }
   }

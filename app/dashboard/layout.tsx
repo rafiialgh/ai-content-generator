@@ -11,8 +11,8 @@ function layout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const [totalUsage, setTotalUsage] = useState<Number>(0)
-  const [isSubscribed, setIsSubscribed] = useState<boolean>(true)
+  const [totalUsage, setTotalUsage] = useState<number>(0)
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(false)
 
   useEffect(() => {
     const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js'
