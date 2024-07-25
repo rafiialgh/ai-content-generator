@@ -94,12 +94,16 @@ function Billing() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-[8.8rem]">
-      <h1 className="text-4xl font-black">Upgrade with monthly plan</h1>
-      <div className="mt-9 grid grid-cols-2 gap-5">
+    <div className="flex flex-col items-center justify-center p-10">
+      <div className='w-80 sm:w-fit flex justify-center'>
+        <h1 className="text-xl font-black sm:text-4xl">
+          Upgrade with monthly plan
+        </h1>
+      </div>
+      <div className="mt-9 grid grid-rows-2 gap-5 lg:grid lg:grid-cols-2">
         {product.map((item: ProductInterfaces, index) => (
           <div
-            className="flex h-[27rem] w-96 flex-col items-center justify-between rounded-xl border bg-white p-10 shadow-sm"
+            className="flex min-h-[27rem] min-w-80 max-w-96 flex-col items-center justify-between rounded-xl border bg-white p-10 shadow-sm"
             key={index}
           >
             <h3 className="text-xl font-black">{item.name}</h3>
@@ -132,7 +136,7 @@ function Billing() {
             </div>
 
             <Button
-            variant={'outline'}
+              variant={'outline'}
               className={`flex w-full gap-1 rounded-full font-black ${isSubscribed && item.button && 'hidden'}`}
               disabled={isSubscribed || item.button || isProcess}
               onClick={() => checkout(item)}

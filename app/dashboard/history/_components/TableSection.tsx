@@ -1,6 +1,7 @@
 'use client'
 import Templates from '@/app/(data)/Templates'
 import { db } from '@/utils/db'
+import copy from 'copy-to-clipboard'
 import { Check, Copy } from 'lucide-react'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -33,7 +34,7 @@ function TableSection() {
   }
 
   const handleCopy = (text: string, index: number) => {
-    navigator.clipboard.writeText(text)
+    copy(text)
     setClickedButtonIndex(index)
     setTimeout(() => {
       setClickedButtonIndex(null)

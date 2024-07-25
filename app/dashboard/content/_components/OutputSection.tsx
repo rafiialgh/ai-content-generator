@@ -3,6 +3,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 import { Button } from '@/components/ui/button';
 import { Check, Copy } from 'lucide-react';
+import copy from 'copy-to-clipboard';
 
 interface PROPS {
   aiOutput: string;
@@ -18,7 +19,7 @@ function OutputSection({ aiOutput }: PROPS) {
   }, [aiOutput]);
 
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
+    copy(text)
     setClickedButtonIndex(true)
     console.log(clickedButtonIndex)
     setTimeout(() => {
