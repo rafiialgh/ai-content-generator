@@ -5,6 +5,7 @@ import Header from './_components/Header'
 import { TotalUsageContext } from '../(context)/TotalUsageContext'
 import Script from 'next/script'
 import { UserSubscriptionContext } from '../(context)/UserSubscriptionContext'
+import { UpdateCreaditUsageContext } from '../(context)/UpdateCreditUsageContext'
 
 function layout({
   children,
@@ -13,6 +14,7 @@ function layout({
 }>) {
   const [totalUsage, setTotalUsage] = useState<number>(0)
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false)
+  const [updateCreditUsage, setUpdateCreditUsage] = useState<any>()
 
   useEffect(() => {
     const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js'
@@ -41,15 +43,19 @@ function layout({
         <UserSubscriptionContext.Provider
           value={{ isSubscribed, setIsSubscribed }}
         >
-          <div className="h-full bg-slate-100 sm:h-screen">
-            <div className="fixed hidden md:block md:w-64">
-              <SideNav />
+          <UpdateCreaditUsageContext.Provider
+            value={{ updateCreditUsage, setUpdateCreditUsage }}
+          >
+            <div className="h-full bg-slate-100 sm:h-screen">
+              <div className="fixed hidden md:block md:w-64">
+                <SideNav />
+              </div>
+              <div className="md:ml-64">
+                <Header />
+                {children}
+              </div>
             </div>
-            <div className="md:ml-64">
-              <Header />
-              {children}
-            </div>
-          </div>
+          </UpdateCreaditUsageContext.Provider>
         </UserSubscriptionContext.Provider>
       </TotalUsageContext.Provider>
     </>

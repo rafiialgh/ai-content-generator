@@ -9,11 +9,15 @@ import { DataTablesProps } from '../history/_components/TableSection'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
 import { NumericFormat } from 'react-number-format'
+import { UpdateCreaditUsageContext } from '@/app/(context)/UpdateCreditUsageContext'
 
 function UsageTrack() {
   const { user } = useUser()
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext)
   const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(
+    UpdateCreaditUsageContext,
+  )
   const [maxWords, setMaxWords] = useState<number>(10000)
 
   useEffect(() => {
@@ -22,6 +26,12 @@ function UsageTrack() {
       isUserSubscribed()
     }
   }, [user])
+
+  useEffect(() => {
+    if (user) {
+      getData()
+    }
+  }, [updateCreditUsage && user])
 
   const getData = async () => {
     try {
@@ -55,7 +65,7 @@ function UsageTrack() {
       .where(
         eq(
           UserSubscription.email,
-          user?.primaryEmailAddress?.emailAddress ?? ''
+          user?.primaryEmailAddress?.emailAddress ?? '',
         ),
       )
 

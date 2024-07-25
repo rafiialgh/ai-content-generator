@@ -15,6 +15,7 @@ import moment from 'moment'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { useRouter } from 'next/navigation'
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
+import { UpdateCreaditUsageContext } from '@/app/(context)/UpdateCreditUsageContext'
 
 export interface SlugInterfaces {
   params: {
@@ -27,6 +28,7 @@ function CreateNewContent(props: SlugInterfaces) {
   const [aiOutput, setAiOutput] = useState<string>('')
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext)
   const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(UpdateCreaditUsageContext)
   const { user } = useUser()
   const router = useRouter()
 
@@ -59,6 +61,7 @@ function CreateNewContent(props: SlugInterfaces) {
       }
 
       setLoading(false)
+      setUpdateCreditUsage(Date.now())
     } catch (error) {
       console.error('Error fetching AI response:', error)
       // Handle the error appropriately
