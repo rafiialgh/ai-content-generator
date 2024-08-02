@@ -24,7 +24,7 @@ function Dashboard() {
   }, [])
 
   return (
-    <div>
+    <div className='h-[calc(100vh-82px)]'>
       <Script
         type="text/javascript"
         src="https://app.sandbox.midtrans.com/snap/snap.js"

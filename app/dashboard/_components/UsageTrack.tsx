@@ -99,9 +99,11 @@ function UsageTrack() {
           Credit used
         </h2>
       </div>
-      <Button variant={'secondary'} className="mt-3 w-full font-medium">
-        Upgrade
-      </Button>
+      {!isSubscribed && (
+        <Button variant={'secondary'} className="mt-3 w-full font-medium">
+          Upgrade
+        </Button>
+      )}
     </div>
   )
 }

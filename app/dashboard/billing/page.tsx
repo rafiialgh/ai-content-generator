@@ -94,13 +94,13 @@ function Billing() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center p-10">
+    <div className="flex flex-col items-center justify-center h-[calc(100vh-82px)]">
       <div className='w-80 sm:w-fit flex justify-center'>
         <h1 className="text-xl font-black sm:text-4xl">
           Upgrade with monthly plan
         </h1>
       </div>
-      <div className="mt-9 grid grid-rows-2 gap-5 lg:grid lg:grid-cols-2">
+      <div className="mt-9 w-fit grid grid-rows-1 gap-5 lg:grid-cols-2">
         {product.map((item: ProductInterfaces, index) => (
           <div
             className="flex min-h-[27rem] min-w-80 max-w-96 flex-col items-center justify-between rounded-xl border bg-white p-10 shadow-sm"

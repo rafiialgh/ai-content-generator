@@ -3,8 +3,8 @@ import React from 'react'
 
 function Settings() {
   return (
-    <div className='flex justify-center items-center p-10'>
-      <UserProfile />
+    <div className='flex justify-center items-center p-10 '>
+      <UserProfile path='/dashboard/settings' />
     </div>
   )
 }

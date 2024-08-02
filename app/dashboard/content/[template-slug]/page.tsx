@@ -28,7 +28,9 @@ function CreateNewContent(props: SlugInterfaces) {
   const [aiOutput, setAiOutput] = useState<string>('')
   const { totalUsage, setTotalUsage } = useContext(TotalUsageContext)
   const { isSubscribed, setIsSubscribed } = useContext(UserSubscriptionContext)
-  const { updateCreditUsage, setUpdateCreditUsage } = useContext(UpdateCreaditUsageContext)
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(
+    UpdateCreaditUsageContext,
+  )
   const { user } = useUser()
   const router = useRouter()
 
@@ -95,13 +97,14 @@ function CreateNewContent(props: SlugInterfaces) {
           Back
         </Button>
       </Link>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10 py-5">
+      <div className="grid grid-cols-1 gap-y-10 sm:gap-10 py-5 md:grid-cols-3">
         {/* Form Section */}
         <FormSection
           selectedTemplate={selectedTemplate}
           userFormInput={(value: any) => GenerateAIContent(value)}
           loading={loading}
         />
+
         {/* Output Section */}
         <div className="col-span-2">
           <OutputSection aiOutput={aiOutput} />

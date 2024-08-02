@@ -15,6 +15,7 @@ function layout({
   const [totalUsage, setTotalUsage] = useState<number>(0)
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false)
   const [updateCreditUsage, setUpdateCreditUsage] = useState<any>()
+  const [isSideNavOpen, setIsSideNavOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const snapScript = 'https://app.sandbox.midtrans.com/snap/snap.js'
@@ -32,6 +33,10 @@ function layout({
     }
   }, [])
 
+  const toggleSideNav = () => {
+    setIsSideNavOpen(!isSideNavOpen)
+  }
+
   return (
     <>
       {/* <Script
@@ -46,12 +51,12 @@ function layout({
           <UpdateCreaditUsageContext.Provider
             value={{ updateCreditUsage, setUpdateCreditUsage }}
           >
-            <div className="h-full bg-slate-100 sm:h-screen">
-              <div className="fixed hidden md:block md:w-64">
-                <SideNav />
+            <div className="h-full bg-slate-100 sm:h-full">
+              <div className={`fixed md:block md:w-64 ${isSideNavOpen ? 'block' : 'hidden'}`}>
+                <SideNav isOpen={isSideNavOpen} toggleSideNav={toggleSideNav} />
               </div>
               <div className="md:ml-64">
-                <Header />
+                <Header toggleSideNav={toggleSideNav} />
                 {children}
               </div>
             </div>
